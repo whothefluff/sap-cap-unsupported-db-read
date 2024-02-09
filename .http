@@ -1,0 +1,104 @@
+@scheme = http
+@hostname = localhost
+@port = 8080
+@host = {{hostname}}:{{port}}
+@service = odata/v4/ExternalCatalogService
+@baseurl = {{scheme}}://{{host}}/{{service}}
+
+# simple get
+GET {{baseurl}}/PointOfInterests HTTP/1.1
+ 
+###   
+ 
+# single entity
+GET {{baseurl}}/PointOfInterests('EX16') HTTP/1.1
+ 
+###
+
+# single entity with select
+GET {{baseurl}}/PointOfInterests('EX1')?$select=country,category HTTP/1.1
+  
+###
+
+# primitive property
+GET {{baseurl}}/PointOfInterests('EX20')/country HTTP/1.1
+
+###  
+ 
+# primitive property raw value
+GET {{baseurl}}/PointOfInterests('EX7')/country/$value HTTP/1.1
+
+###
+  
+# count
+GET {{baseurl}}/PointOfInterests/$count HTTP/1.1
+
+###
+
+# inline count
+GET {{baseurl}}/PointOfInterests?$count=true HTTP/1.1 
+
+###
+
+# count found entities
+GET {{baseurl}}/PointOfInterests/$count?$filter=country ne 'FR' HTTP/1.1
+  
+###
+
+# select
+GET {{baseurl}}/PointOfInterests?$select=country,category HTTP/1.1
+
+###
+
+# simple filter
+GET {{baseurl}}/PointOfInterests?$filter=ID eq 'EX3' or ID eq 'EX4' HTTP/1.1 
+
+### 
+
+# in filter
+GET {{baseurl}}/PointOfInterests?$filter=ID in ('EX3', 'EX4') HTTP/1.1 
+
+### 
+
+# order by
+GET {{baseurl}}/PointOfInterests?$orderby=subcategory desc,category asc HTTP/1.1
+ 
+### 
+ 
+# valid search
+GET {{baseurl}}/PointOfInterests?$search=12&$filter=country eq 'FR' HTTP/1.1
+
+### 
+
+# invalid search
+GET {{baseurl}}/PointOfInterests?$search=not 13 and 14&$filter=country eq 'FR' HTTP/1.1
+
+### 
+
+# valid JPQL function: tolower
+GET {{baseurl}}/PointOfInterests?$filter=tolower(name) eq 'EXAMPLE 19' HTTP/1.1
+
+### 
+
+# invalid JPQL function: starts
+GET {{baseurl}}/PointOfInterests?$filter=startswith(name,'asdf') HTTP/1.1
+
+### 
+
+# invalid JPQL function: contains
+GET {{baseurl}}/PointOfInterests?$filter=contains(name,'f') HTTP/1.1
+
+### 
+
+# invalid OData operation:  concat
+GET {{baseurl}}/PointOfInterests?$filter=concat(ID,name) eq 'EX1 Example1' HTTP/1.1
+
+###
+
+# invalid JPQL function: matches
+GET {{baseurl}}/PointOfInterests?$filter=matchesPattern(name,'%5EA.*e$') HTTP/1.1
+
+###
+
+#
+GET {{baseurl}}/PointOfInterests?$apply= HTTP/1.1

@@ -1,0 +1,9 @@
+---
+spring:
+  config.activate.on-profile: 
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+cds:
+  datasource.auto-config.enabled: false
